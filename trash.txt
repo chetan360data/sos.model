@@ -1,0 +1,35 @@
+from  python_speech_features import mfcc , logfbank
+import matplotlib.pyplot as plt
+import numpy as np
+import librosa
+
+classes = ['class1', 'class2', 'class3']
+
+bank = {}
+mfccs = {}
+import numpy as np
+
+def calc_fft(y, rate):
+    n = len(y)
+    freq = np.fft.fftfreq(n, d=1/rate)
+    Y = np.abs(np.fft.rfft(y) / n)
+    return Y, freq
+
+
+signal, rate = librosa.load("scream_test_data/s_329.wav",sr=None)
+Y, freq = calc_fft(signal, rate)
+bank = logfbank(signal[:rate], rate, nfilt=26, nfft=2048)    # Calculate MFCCs
+mel = mfcc(signal[:rate], rate, numcep=13, nfilt=26, nfft=2048)
+
+def extract_audio_features(file_path, sr=None, num_filters=26, num_mfcc=13, nfft=2048):
+    signal, rate = librosa.load(file_path, sr=sr)
+    def calc_fft(y, rate):
+        n = len(y)
+        freq = np.fft.fftfreq(n, d=1/rate)
+        Y = np.abs(np.fft.rfft(y) / n)
+        return Y, freq
+    Y, freq = calc_fft(signal, rate)
+    bank = logfbank(signal[:rate], rate, nfilt=num_filters, nfft=nfft)    
+    mel = mfcc(signal[:rate], rate, numcep=num_mfcc, nfilt=num_filters, nfft=nfft)
+
+----------------------------------------------------------------------------------------------
